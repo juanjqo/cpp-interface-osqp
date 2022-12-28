@@ -25,12 +25,11 @@ if(APPLE)
         /usr/local/lib/)
 endif()
 
-set(OSQP_PATH /usr/local/include/osqp)
-include_directories(${OSQP_PATH})
-add_library(my_osqp /usr/local/lib/libosqp.dylib)
+
 
 add_executable(osqp main.cpp)
-target_link_directories(osqp PRIVATE osqp::osqp)
+target_link_libraries(osqp PRIVATE osqp::osqp)
+#target_link_libraries(yourTarget PRIVATE osqp::osqpstatic)
 
 install(TARGETS osqp
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
