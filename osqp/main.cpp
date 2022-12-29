@@ -1,7 +1,12 @@
 #include <iostream>
 #include "osqp.h"
+#include <Eigen/Dense>
+#include <memory>
 
 using namespace std;
+using namespace Eigen;
+
+
 
 int main(int argc, char **argv)
 {
@@ -27,6 +32,7 @@ int main(int argc, char **argv)
         OSQPWorkspace *work;
         OSQPSettings  *settings = (OSQPSettings *)c_malloc(sizeof(OSQPSettings));
         OSQPData      *data     = (OSQPData *)c_malloc(sizeof(OSQPData));
+        //OSQPSolution  *solution = (OSQPSolution *)c_malloc(sizeof(OSQPSolution));
 
         // Populate data
         if (data) {
@@ -43,6 +49,7 @@ int main(int argc, char **argv)
         if (settings) {
             osqp_set_default_settings(settings);
             settings->alpha = 1.0; // Change alpha parameter
+            settings->verbose = 0.0;
         }
 
         // Setup workspace
@@ -50,6 +57,9 @@ int main(int argc, char **argv)
 
         // Solve Problem
         osqp_solve(work);
+        auto rt0 = Eigen::Map<VectorXd>(work->solution->x, 2);
+        //auto rt = Eigen::Map<Eigen::Matrix<c_float, -1, 1>>(work->solution->x, 2, 1);
+        std::cout<<"Solution: "<<rt0<<std::endl;
 
         // Cleanup
         osqp_cleanup(work);
@@ -59,6 +69,8 @@ int main(int argc, char **argv)
             c_free(data);
         }
         if (settings) c_free(settings);
+        //if (solution) c_free(solution);
+
 
         return exitflag;
 }
