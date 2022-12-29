@@ -34,5 +34,8 @@ target_link_libraries(osqp PRIVATE osqp::osqp)
 add_executable(osqp_smartPointers osqp_smartPointers.cpp)
 target_link_libraries(osqp_smartPointers PRIVATE osqp::osqp)
 
+add_executable(osqp_example osqp_example.cpp)
+target_link_libraries(osqp_example PRIVATE osqp::osqp)
+
 install(TARGETS osqp
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
