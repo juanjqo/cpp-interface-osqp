@@ -19,7 +19,7 @@ void eigen_to_csc(const MatrixXd &H, const bool &upper_triangle_flag)
     }else{
         mat = MatrixXd(H).sparseView();
     }
-
+    mat.makeCompressed();
     std::cout << mat<< "\n\n";
     int nnz = mat.nonZeros();
     std::cout <<"Number of Non zeros entries: "<<nnz<<std::endl;
@@ -60,13 +60,6 @@ void eigen_to_csc(const MatrixXd &H, const bool &upper_triangle_flag)
 
         }
 
-
-
-
-
-
-
-
         i++;
       }
 
@@ -78,15 +71,18 @@ void eigen_to_csc(const MatrixXd &H, const bool &upper_triangle_flag)
                 ", {"<<H_i_vec.transpose()<<"},  {"<<H_p_vec.transpose()<<"}"<<std::endl;
 
 
-    std::cout <<"--------------"<< "\n\n";
+    std::cout <<"--------------"<<std::endl; //"\n\n";
+    auto H_test = Eigen::Map<Eigen::VectorXi>(mat.outerIndexPtr(), n+1);
+    std::cout<<H_test<<std::endl;
+    std::cout <<"--------------"<<std::endl;
 }
+
 
 void eigen2csc(const MatrixXd &H, const bool &upper_triangle_flag)
 {
     int m = H.rows();
     int n = H.cols();
-    Eigen::SparseMatrix<double, Eigen::ColMajor> mat;
-
+    Eigen::SparseMatrix<double> mat;
     if (upper_triangle_flag == true)
     {
         mat = MatrixXd(H.triangularView<Upper>()).sparseView();
@@ -94,31 +90,52 @@ void eigen2csc(const MatrixXd &H, const bool &upper_triangle_flag)
         mat = MatrixXd(H).sparseView();
     }
     mat.makeCompressed();
+    std::cout << mat<< "\n";
+    int nnz = mat.nonZeros();
 
-    std::cout <<m<<", "<<n<<", "<<mat.nonZeros()<<", "<<"{" <<mat.valuePtr()<<"}"<<
-                ", {"<<(c_int*)mat.innerIndexPtr()<<"},  {"<<(c_int*)mat.outerIndexPtr()<<"}"<<std::endl;
-
+    auto H_x_vec = Eigen::Map<Eigen::VectorXd>(mat.valuePtr(), nnz); // VectorXd>(H_x, nnz)
+    auto H_i_vec = Eigen::Map<Eigen::VectorXi>(mat.innerIndexPtr(), nnz);             // VectorXd(H_i, nnz)
+    auto H_p_vec = Eigen::Map<Eigen::VectorXi>(mat.outerIndexPtr(), n+1);
+    std::cout <<"--------------"<<std::endl;
+    std::cout <<m<<", "<<n<<", "<<nnz<<", "<<"{" <<H_x_vec.transpose()<<"}"<<
+                ", {"<<H_i_vec.transpose()<<"},  {"<<H_p_vec.transpose()<<"}"<<std::endl;
+    std::cout <<"--------------"<<std::endl;
 }
 
-typedef long long c_int;
+
+/**
+ * @brief solve_quadratic_program
+ * @param H
+ * @param f
+ * @param A
+ * @param b
+ * @param Aeq
+ * @param beq
+ * @return
+ */
+VectorXd solve_quadratic_program(const MatrixXd& H, const VectorXd& f,
+                                 const MatrixXd& A, const VectorXd& b,
+                                 const MatrixXd& Aeq, const VectorXd& beq)
+{
+
+    return VectorXd::Zero(1);
+}
+
 
 int main(int argc, char **argv)
 {
     MatrixXd H = MatrixXd(2,2);
-    H << 4,1,1,2;
-    //eigen2csc(H, true);
+    H << 4.0, 1.0, 1.0,2.0;
+    eigen2csc(H, true);
 
-    //MatrixXd A = MatrixXd(3,2);
-    //A << 1,1,1,0,0,1;
-    //eigen_to_csc(A, false);
+    MatrixXd A = MatrixXd(3,2);
+    A << 1,1,1,0,0,1;
+    eigen2csc(A, false);
 
 
     Matrix<double,Dynamic,Dynamic> tempH = H.triangularView<Upper>();
     SparseMatrix<double, ColMajor> HessianS = tempH.sparseView();
     HessianS.makeCompressed();
-
-
-
 
     // Load problem data
         c_float P_x[3] = {4.0, 1.0, 2.0, };
@@ -141,12 +158,16 @@ int main(int argc, char **argv)
         OSQPWorkspace *work;
         std::unique_ptr<OSQPSettings>  settings_sptr(new OSQPSettings());
         std::unique_ptr<OSQPData>      data_sptr(new OSQPData());
+        std::shared_ptr<csc>           csc_sptr(new csc());
+
+
 
         if (data_sptr) {
             data_sptr->n = n;
             data_sptr->m = m;
-            //data_sptr->P = csc_matrix(data_sptr->n, data_sptr->n, P_nnz, P_x, P_i, P_p);
-            data_sptr->P = csc_matrix(n, n, HessianS.nonZeros(), HessianS.valuePtr(), (c_int*)HessianS.innerIndexPtr(), (c_int*)HessianS.outerIndexPtr());
+            data_sptr->P = csc_matrix(data_sptr->n, data_sptr->n, P_nnz, P_x, P_i, P_p);
+
+
             data_sptr->q = q;
             data_sptr->A = csc_matrix(data_sptr->m, data_sptr->n, A_nnz, A_x, A_i, A_p);
             data_sptr->l = l;

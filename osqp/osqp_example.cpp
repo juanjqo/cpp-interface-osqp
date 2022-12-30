@@ -61,8 +61,8 @@ int main() {
                 osqp_set_default_settings(settings);
                 settings->alpha = 1.0; // Change alpha parameter
                 // settings->verbose = 0;
-                settings->delta = 0.1;
-                settings->time_limit = 0.5;
+                //settings->delta = 0.1;
+                //settings->time_limit = 0.5;
             }
 
     // Exitflag
