@@ -25,8 +25,7 @@ cmake --build . --target install
 cd ~/Downloads
 git clone https://github.com/juanjqo/cpp-interface-osqp.git
 cd cpp-interface-osqp
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
 make -j16
 sudo make install
@@ -57,4 +56,13 @@ DQ xdesired = 1 + E_*0.5*DQ(0, 0.2, 0.3, 0.3);
 VectorXd q = VectorXd::Zero(7);
 auto u_osqp = controller_osqp.compute_setpoint_control_signal(q, vec4(xdesired.translation()));
 std::cout<<"u_osqp:    "<<u_osqp.transpose()<<std::endl;
+```
+
+Link the osqp library:
+
+```cmake
+add_executable(my_example my_example.cpp)
+target_link_libraries(my_example PRIVATE osqp::osqp
+                      pthread
+                      dqrobotics)
 ```
