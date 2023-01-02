@@ -53,9 +53,9 @@ protected:
      * @param use_upper_triangle_matrix
      * @return the sparse eigen matrix
      */
-    SparseMatrix<double> _dense2sparse(const MatrixXd &H, const bool &use_upper_triangle_matrix)
+    Eigen::SparseMatrix<double> _dense2sparse(const MatrixXd &H, const bool &use_upper_triangle_matrix)
     {
-        SparseMatrix<double> mat;
+        Eigen::SparseMatrix<double> mat;
         if (use_upper_triangle_matrix == true)
         {
             mat = MatrixXd(H.triangularView<Upper>()).sparseView();
@@ -92,7 +92,7 @@ public:
     VectorXd _solve_osqp_quadratic_program(const MatrixXd& H, const VectorXd& f, const MatrixXd& A,  const VectorXd& b,
                                            const MatrixXd& Aeq, const VectorXd& beq)
     {
-        SparseMatrix<double> P_sparse = _dense2sparse(H, true);
+        Eigen::SparseMatrix<double> P_sparse = _dense2sparse(H, true);
         //const int m_P = P_sparse.rows();
         const int n_P = P_sparse.cols();
         const int nnz_P =  P_sparse.nonZeros();
@@ -104,7 +104,7 @@ public:
         std::copy(P_sparse.innerIndexPtr(), P_sparse.innerIndexPtr() +nnz_P, P_i_array);
         std::copy(P_sparse.outerIndexPtr(), P_sparse.outerIndexPtr() +n_P+1, P_p_array);
 
-        SparseMatrix<double> A_sparse;
+        Eigen::SparseMatrix<double> A_sparse;
         VectorXd ub_;
 
         // If there are no constraints the solver fails. A naive way to circumvent this is to impose
