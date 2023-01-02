@@ -25,8 +25,8 @@ Contributors:
 #include <dqrobotics/solvers/DQ_QuadraticProgrammingSolver.h>
 #include <iostream>
 #include <osqp.h>
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
+#include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/Sparse>
 
 
 using namespace Eigen;
