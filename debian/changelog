@@ -1,5 +1,5 @@
-libdqrobotics-interface-qpoases (22.04) UNRELEASED; urgency=medium
+libdqrobotics-interface-osqp (22.04) UNRELEASED; urgency=medium
 
   * Initial release. 
 
- -- Murilo M. Marinho <murilo@g.ecc.u-tokyo.ac.jp>  Mon, 27 Jun 2022 20:17:23 -0700
+ -- Juan Jose Quiroz Omana <juanjqo@g.ecc.u-tokyo.ac.jp>  Mon, 2 Jan 2023 16:23:00 -0700
