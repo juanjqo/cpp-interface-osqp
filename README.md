@@ -32,7 +32,7 @@ make -j16
 sudo make install
 ```
 
-Example of use:
+### Example of use:
 
 ```CPP
 #include <memory>
@@ -59,7 +59,7 @@ auto u_osqp = controller_osqp.compute_setpoint_control_signal(q, vec4(xdesired.t
 std::cout<<"u_osqp:    "<<u_osqp.transpose()<<std::endl;
 ```
 
-Link the osqp library:
+### Link the osqp library:
 
 ```cmake
 add_executable(my_example my_example.cpp)
