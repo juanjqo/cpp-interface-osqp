@@ -1,4 +1,4 @@
-# cpp-interface-osqp ![](https://img.shields.io/badge/status-experimental-critical)
+# cpp-interface-osqp ![Static Badge](https://img.shields.io/badge/status-experimental--alpha-critical)
 ![](https://img.shields.io/badge/Tests-developer%20workflow-orange)![](https://img.shields.io/badge/Ubuntu%2022.04%20LTS%20(x64)-Unknown-yellow)![](https://img.shields.io/badge/MacOS%2013.1%20(ARM64)%20-passing-passing)
 
 Interface between DQ_Robotics and [OSQP](https://github.com/osqp/osqp)
