@@ -45,7 +45,7 @@ using namespace Eigen;
 using namespace DQ_robotics;
 
 auto robot = std::make_shared<DQ_SerialManipulatorMDH>(FrankaEmikaPandaRobot::kinematics());
-auto osqp_solver   = std::make_shared<DQ_OSQPSolver>(DQ_OSQPSolver());
+auto osqp_solver   = std::make_shared<DQ_OSQPSolver>();
 
 DQ_ClassicQPController controller_osqp(robot, osqp_solver);
 controller_osqp.set_gain(0.5);
