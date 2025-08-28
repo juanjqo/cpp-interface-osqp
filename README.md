@@ -16,7 +16,7 @@ cd osqp
 mkdir build && cd build
 cmake -G "Unix Makefiles" ..
 cmake --build .
-cmake --build . --target install
+sudo cmake --build . --target install
 ```
 
 
